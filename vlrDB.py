@@ -64,13 +64,12 @@ short = na_short+br_short+lt_short+fr_short+es_short+tk_short+uk_short+ua_short+
 class vlrDB: 
 	"""Basic Structure to operate on Valorant data pulled from VLR"""
 
-
 	class Match: 
-		length = 3
+		cols = ['map','winner','loser','map_pick','side_pick','team1','team1_score','team2','team2_score','t1_team','t1_rounds','ct1_team','ct1_rounds','t2_team','t2_rounds','ct2_team','ct2_rounds','team1_ot','team2_ot']
+		maps = pd.DataFrame(columns=cols)
 		team1 = None
 		team2 = None
 		winner = None
-		maps = None
 		event_series = ""
 		match_desc = ""
 		map_veto = ""
@@ -97,14 +96,13 @@ class vlrDB:
 			"team2_ot" 	: [0]
 			}
 
-		def __init__(self):
-			cols = ['map','winner','loser','map_pick','side_pick','team1','team1_score','team2','team2_score','t1_team','t1_rounds','ct1_team','ct1_rounds','t2_team','t2_rounds','ct2_team','ct2_rounds','team1_ot','team2_ot']
-			self.maps = pd.DataFrame(columns=cols)
+		def __init__(self,url):
+			self.parse_match(url)
 			
 		def __str__(self):
 			ret = f'{self.event_series} - {self.match_desc} \n'
 			ret += self.map_veto + '\n'
-			ret += str(self.maps)
+			ret += str(self.maps) + '\n'			
 			return ret
 
 		def parse_map(self, map_stats):
@@ -198,8 +196,10 @@ class vlrDB:
 			self.event_series = re.sub("\s+"," ",self.event_series)
 			self.match_desc = soup(attrs={"class":"match-header-event-series"})[0].text.strip()
 			self.match_desc = re.sub("\s+"," ",self.match_desc)
-			self.map_veto = soup(attrs={"class":"match-header-note"})[0].text.strip()
-			self.map_veto = re.sub("\s+"," ",self.map_veto)
+			self.map_veto = soup(attrs={"class":"match-header-note"})#[0].text.strip()
+			for veto in self.map_veto:
+				if "pick" in veto.text.strip():
+					self.map_veto = re.sub("\s+"," ",veto.text.strip())
 			split = self.map_veto.split('; ')
 			picks = []
 			for entry in split:
@@ -230,6 +230,53 @@ class vlrDB:
 			self.region = region
 			self.subregion = subregion
 
+	def process_team(self,url,file):
+		page = requests.get(url)
+		soup = BeautifulSoup(page.text, 'html.parser')
+		games = soup(attrs={'class':'mod-dark'})
+		urls = []
+		for link in games[0]('a'):
+			urls.append(link.get('href'))
+		matches = []
+		for link in urls:
+			current_match = self.Match(f'https://www.vlr.gg{link}')
+			matches.append(current_match)
+			file.write(str(current_match))
+		return matches
+
+	def process_event(self,url,file):
+		page = requests.get(url)
+		soup = BeautifulSoup(page.text, 'html.parser')
+		games = soup(attrs={'class':'match-item'})
+		urls = []
+		for a_el in soup('a'):
+			link = a_el.get('href')
+			try:
+				split = link.split('/')
+			except:
+				pass
+			if len(split) < 2:
+				pass
+			elif self.is_int(split[1]):
+				urls.append(link)
+		matches = []
+		for link in urls:
+			current_match = self.Match(f'https://www.vlr.gg{link}')
+			matches.append(current_match)
+			file.write(str(current_match))
+		return matches
+
+	def is_int(self, num):
+		flag = True
+		try:
+			int(num)
+		except ValueError:
+			flag = False
+		if flag:
+			return True
+		else:
+			return False
+
 	#def __init__(self):
 	#	AMER = []
 	#	for name, short in zip(self.na_teams,self.na_short):
@@ -238,7 +285,7 @@ class vlrDB:
 	#		AMER.append(self.Team(name, short, "AMER","BR")) 
 	#	for name, short in zip(self.lt_teams,self.lt_short):
 	#		AMER.append(self.Team(name, short, "AMER","LT"))
-#
+
 	#	EMEA =[]
 	#	for name, short in zip(self.fr_teams,self.fr_short):
 	#		EMEA.append(self.Team(name, short, "EMEA","FR")) 
@@ -252,8 +299,6 @@ class vlrDB:
 	#		EMEA.append(self.Team(name, short, "EMEA","UK")) 
 	#	for name, short in zip(self.ua_teams,self.ua_short):
 	#		EMEA.append(self.Team(name, short, "EMEA","UA")) 
-#
-	#	#do apac...
-#
+
 	#	regions = [AMER,"APAC",EMEA]
 	

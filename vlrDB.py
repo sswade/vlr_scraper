@@ -7,60 +7,60 @@ import requests
 ### --------- TODO ---------
 # Make grabbing team name vs team short name automatic (really only matters for the map veto. right now i can only do champs teams)
 
-na_short = ["100T", "C9", "EG", "NRG", "SEN"]
-na_teams = ["100 Thieves", "Cloud9", "Evil Geniuses", "NRG Esports", "Sentinels"]
-br_short = ["FUR", "LOUD", "MIBR"]
-br_teams = ["FURIA", "LOUD", "MIBR"]
-lt_short = ["KRÜ", "LEV"]
-lt_teams = ["KRÜ Esports", "Leviatán"]
-fr_short = ["KC","VIT"]
-fr_teams = ["Karmine Corp","Team Vitality"]
-es_short = ["GIA","KOI","TH"]
-es_teams = ["Giants Gaming", "KOI", "Team Heretics"]
-tk_short = ["BBL","FUT"]
-tk_teams = ["BBL Esports","FUT Esports"]
-nl_short = ["TL"]
-nl_teams = ["Team Liquid"]
-uk_short = ["FNC"]
-uk_teams = ["FNATIC"]
-ua_short = ["NAVI"]
-ua_teams = ["Natus Vincere"]
-kr_short = ["DRX","GEN","T1"]
-kr_teams = ["DRX","Gen.G","T1"]
-jp_short = ["DFM","ZETA"]
-jp_teams = ["DetonatioN FocusMe","ZETA DIVISION"]
-sg_short = ["PRX"]
-sg_teams = ["Paper Rex"]
-ph_short = ["TS"]
-ph_teams = ["Team Secret"]
-th_short = ["TLN"]
-th_teams = ["Talon Esports"]
-id_short = ["RRQ"]
-id_teams = ["Rex Regum Qeon"]
-in_short = ["GE"]
-in_teams = ["Global Esports"]
-cn_short = ["EDG","FPX","BLG","ASE"]
-cn_teams = ["EDward Gaming","FunPlus Phoenix","Bilibili Gaming","Attacking Soul Esports"]
-team_names = dict(zip(na_short,na_teams))
-team_names.update(dict(zip(br_short,br_teams)))
-team_names.update(dict(zip(lt_short,lt_teams)))
-team_names.update(dict(zip(fr_short,fr_teams)))
-team_names.update(dict(zip(es_short,es_teams)))
-team_names.update(dict(zip(tk_short,tk_teams)))
-team_names.update(dict(zip(nl_short,nl_teams)))
-team_names.update(dict(zip(uk_short,uk_teams)))
-team_names.update(dict(zip(ua_short,ua_teams)))
-team_names.update(dict(zip(kr_short,kr_teams)))
-team_names.update(dict(zip(jp_short,jp_teams)))
-team_names.update(dict(zip(sg_short,sg_teams)))
-team_names.update(dict(zip(ph_short,ph_teams)))
-team_names.update(dict(zip(th_short,th_teams)))
-team_names.update(dict(zip(id_short,id_teams)))
-team_names.update(dict(zip(in_short,in_teams)))
-team_names.update(dict(zip(cn_short,cn_teams)))
-
-teams = na_teams+br_teams+lt_teams+fr_teams+es_teams+tk_teams+uk_teams+ua_teams+nl_teams
-short = na_short+br_short+lt_short+fr_short+es_short+tk_short+uk_short+ua_short+nl_short
+#na_short = ["100T", "C9", "EG", "NRG", "SEN"]
+#na_teams = ["100 Thieves", "Cloud9", "Evil Geniuses", "NRG Esports", "Sentinels"]
+#br_short = ["FUR", "LOUD", "MIBR"]
+#br_teams = ["FURIA", "LOUD", "MIBR"]
+#lt_short = ["KRÜ", "LEV"]
+#lt_teams = ["KRÜ Esports", "Leviatán"]
+#fr_short = ["KC","VIT"]
+#fr_teams = ["Karmine Corp","Team Vitality"]
+#es_short = ["GIA","KOI","TH"]
+#es_teams = ["Giants Gaming", "KOI", "Team Heretics"]
+#tk_short = ["BBL","FUT"]
+#tk_teams = ["BBL Esports","FUT Esports"]
+#nl_short = ["TL"]
+#nl_teams = ["Team Liquid"]
+#uk_short = ["FNC"]
+#uk_teams = ["FNATIC"]
+#ua_short = ["NAVI"]
+#ua_teams = ["Natus Vincere"]
+#kr_short = ["DRX","GEN","T1"]
+#kr_teams = ["DRX","Gen.G","T1"]
+#jp_short = ["DFM","ZETA"]
+#jp_teams = ["DetonatioN FocusMe","ZETA DIVISION"]
+#sg_short = ["PRX"]
+#sg_teams = ["Paper Rex"]
+#ph_short = ["TS"]
+#ph_teams = ["Team Secret"]
+#th_short = ["TLN"]
+#th_teams = ["Talon Esports"]
+#id_short = ["RRQ"]
+#id_teams = ["Rex Regum Qeon"]
+#in_short = ["GE"]
+#in_teams = ["Global Esports"]
+#cn_short = ["EDG","FPX","BLG","ASE"]
+#cn_teams = ["EDward Gaming","FunPlus Phoenix","Bilibili Gaming","Attacking Soul Esports"]
+#team_names = dict(zip(na_short,na_teams))
+#team_names.update(dict(zip(br_short,br_teams)))
+#team_names.update(dict(zip(lt_short,lt_teams)))
+#team_names.update(dict(zip(fr_short,fr_teams)))
+#team_names.update(dict(zip(es_short,es_teams)))
+#team_names.update(dict(zip(tk_short,tk_teams)))
+#team_names.update(dict(zip(nl_short,nl_teams)))
+#team_names.update(dict(zip(uk_short,uk_teams)))
+#team_names.update(dict(zip(ua_short,ua_teams)))
+#team_names.update(dict(zip(kr_short,kr_teams)))
+#team_names.update(dict(zip(jp_short,jp_teams)))
+#team_names.update(dict(zip(sg_short,sg_teams)))
+#team_names.update(dict(zip(ph_short,ph_teams)))
+#team_names.update(dict(zip(th_short,th_teams)))
+#team_names.update(dict(zip(id_short,id_teams)))
+#team_names.update(dict(zip(in_short,in_teams)))
+#team_names.update(dict(zip(cn_short,cn_teams)))
+#
+#teams = na_teams+br_teams+lt_teams+fr_teams+es_teams+tk_teams+uk_teams+ua_teams+nl_teams
+#short = na_short+br_short+lt_short+fr_short+es_short+tk_short+uk_short+ua_short+nl_short
 class vlrDB: 
 	"""Basic Structure to operate on Valorant data pulled from VLR"""
 
@@ -205,6 +205,7 @@ class vlrDB:
 			for entry in split:
 				if 'pick' in entry:
 					picks.append(entry)
+			team_names = self.get_teams(soup)
 			for x in range(len(self.maps.index)):
 				if x == len(picks):
 					self.maps.at[x,"map_pick"] = 'remains'
@@ -216,6 +217,32 @@ class vlrDB:
 						self.maps.at[x,"side_pick"] = self.team2
 					elif team == self.team2:
 						self.maps.at[x,"side_pick"] = self.team1
+
+		def get_teams(self,soup):
+			match_header_link = soup(attrs={'class':'match-header-link'})
+			link = match_header_link[0].get('href')
+			team1_url = f'https://www.vlr.gg{link}'
+			link = match_header_link[1].get('href')
+			team2_url = f'https://www.vlr.gg{link}'
+
+			team1 = self.get_team(team1_url)
+			team2 = self.get_team(team2_url)
+			team1.update(team2)
+			return team1
+
+		def get_team(self,url):
+			page = requests.get(url)
+			soup = BeautifulSoup(page.text, 'html.parser')
+			headings = soup('h1')
+			team_name = headings[0].text.strip()
+			
+			team_tag = soup(attrs={'class':'team-header-tag'})
+			if len(team_tag) < 1:
+				team_tag = team_name 
+			else:
+				team_tag = team_tag[0].text.strip()
+			team = {team_tag : team_name}
+			return team
 
 	class Team:
 		name = ""
@@ -283,9 +310,9 @@ class vlrDB:
 			else:
 				return False
 
-	def combine_events(self, events):
+	def combine_datasets(self, datasets):
 		data = []
-		for event in events:
+		for event in datasets:
 			data.append(event.data)
 
 		df = pd.concat(data,ignore_index=True)

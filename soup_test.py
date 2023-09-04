@@ -10,11 +10,11 @@ url = "https://www.vlr.gg/247077/paper-rex-vs-edward-gaming-valorant-champions-2
 url = "https://www.vlr.gg/232735/kr-esports-vs-leviat-n-champions-tour-2023-americas-last-chance-qualifier-gf"
 url = 'https://www.vlr.gg/167393/loud-vs-fnatic-champions-tour-2023-lock-in-s-o-paulo-gf'
 
-url = "https://www.vlr.gg/event/matches/1657/valorant-champions-2023/?series_id=all"
 #url = 'https://www.vlr.gg/event/matches/1657/valorant-champions-2023/?series_id=3264'
 
+
 def ascent_champs_lcq_masters():
-	file = open("vlrtest.html","w")
+	url = "https://www.vlr.gg/event/matches/1657/valorant-champions-2023/?series_id=all"
 	champs = db.Event(url)
 	champs.data.to_html('champs.html')
 	
@@ -34,18 +34,27 @@ def ascent_champs_lcq_masters():
 	tokyo = db.Event(url)
 	tokyo.data.to_html('tokyo.html')
 	
-	combined = db.combine_events([champs,amerlcq,emealcq,apaclcq,tokyo])
+	combined = db.combine_datasets([champs,amerlcq,emealcq,apaclcq,tokyo])
 	ascent = combined[(combined['map'] == 'Ascent')]
 	ascent.to_html('ascent.html')
 
-#url = "https://www.vlr.gg/237267/rex-regum-qeon-vs-global-esports-champions-tour-2023-pacific-last-chance-qualifier-ubqf/?game=135652&tab=overview"
-#match = db.Match(url)
+
+# Process one team's URL
+
+def match_test():
+	file = open("vlrtest.html","w")
+	#url = "https://www.vlr.gg/237267/rex-regum-qeon-vs-global-esports-champions-tour-2023-pacific-last-chance-qualifier-ubqf/?game=135652&tab=overview"
+	#url = 'https://www.vlr.gg/235556/trace-esports-vs-bilibili-gaming-champions-tour-2023-champions-china-qualifier-ubsf/?game=135287&tab=overview' # won't work due to team name not exsiting, fix it so it pulls the keys automatically from the team page
+	url = "https://www.vlr.gg/235372/koi-vs-natus-vincere-champions-tour-2023-emea-last-chance-qualifier-lbf" # koi doesn't have a tag and name, just a name
+	match = db.Match(url)
+	file.write(str(match))
+	file.close()
+
+match_test()
 #
 #url = 'https://www.vlr.gg/167393/loud-vs-fnatic-champions-tour-2023-lock-in-s-o-paulo-gf'
-#url = 'https://www.vlr.gg/235556/trace-esports-vs-bilibili-gaming-champions-tour-2023-champions-china-qualifier-ubsf/?game=135287&tab=overview' # won't work due to team name not exsiting, fix it so it pulls the keys automatically from the team page
 #url = "https://www.vlr.gg/247096/zeta-division-vs-nrg-esports-valorant-champions-2023-group-stage-elim-c/?game=137389&tab=overview"
 
 #EG_EDG = db.Match(url)
 
-file.write(str(match))
-file.close()
+

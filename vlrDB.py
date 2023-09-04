@@ -10,7 +10,7 @@ import requests
 na_short = ["100T", "C9", "EG", "NRG", "SEN"]
 na_teams = ["100 Thieves", "Cloud9", "Evil Geniuses", "NRG Esports", "Sentinels"]
 br_short = ["FUR", "LOUD", "MIBR"]
-br_teams = ["Furia", "LOUD", "MIBR"]
+br_teams = ["FURIA", "LOUD", "MIBR"]
 lt_short = ["KRÜ", "LEV"]
 lt_teams = ["KRÜ Esports", "Leviatán"]
 fr_short = ["KC","VIT"]
@@ -36,11 +36,11 @@ ph_teams = ["Team Secret"]
 th_short = ["TLN"]
 th_teams = ["Talon Esports"]
 id_short = ["RRQ"]
-id_teams = ["Rex Regum Qeon "]
+id_teams = ["Rex Regum Qeon"]
 in_short = ["GE"]
 in_teams = ["Global Esports"]
-cn_short = ["EDG","FPX","BLG"]
-cn_teams = ["EDward Gaming","FunPlus Phoenix","Bilibili Gaming"]
+cn_short = ["EDG","FPX","BLG","ASE"]
+cn_teams = ["EDward Gaming","FunPlus Phoenix","Bilibili Gaming","Attacking Soul Esports"]
 team_names = dict(zip(na_short,na_teams))
 team_names.update(dict(zip(br_short,br_teams)))
 team_names.update(dict(zip(lt_short,lt_teams)))
@@ -230,52 +230,66 @@ class vlrDB:
 			self.region = region
 			self.subregion = subregion
 
-	def process_team(self,url,file):
-		page = requests.get(url)
-		soup = BeautifulSoup(page.text, 'html.parser')
-		games = soup(attrs={'class':'mod-dark'})
-		urls = []
-		for link in games[0]('a'):
-			urls.append(link.get('href'))
-		matches = []
-		for link in urls:
-			current_match = self.Match(f'https://www.vlr.gg{link}')
-			matches.append(current_match)
-			file.write(str(current_match))
-		return matches
+		def process_team(self,url,file):
+			page = requests.get(url)
+			soup = BeautifulSoup(page.text, 'html.parser')
+			games = soup(attrs={'class':'mod-dark'})
+			urls = []
+			for link in games[0]('a'):
+				urls.append(link.get('href'))
+			matches = []
+			for link in urls:
+				current_match = self.Match(f'https://www.vlr.gg{link}')
+				matches.append(current_match)
+				file.write(str(current_match))
+			return matches
 
-	def process_event(self,url,file):
-		page = requests.get(url)
-		soup = BeautifulSoup(page.text, 'html.parser')
-		games = soup(attrs={'class':'match-item'})
-		urls = []
-		for a_el in soup('a'):
-			link = a_el.get('href')
+	class Event:
+		matches = []
+		data = pd.DataFrame()
+
+		def __init__(self,url):
+			self.process_event(url)
+
+		def process_event(self,url):
+			page = requests.get(url)
+			soup = BeautifulSoup(page.text, 'html.parser')
+			games = soup(attrs={'class':'match-item'})
+			urls = []
+			for a_el in soup('a'):
+				link = a_el.get('href')
+				try:
+					split = link.split('/')
+				except:
+					pass
+				if len(split) < 2:
+					pass
+				elif self.is_int(split[1]):
+					urls.append(link)
+			for link in urls:
+				current_match = vlrDB.Match(f'https://www.vlr.gg{link}')
+				self.matches.append(current_match)
+				self.data = pd.concat([self.data,current_match.maps],ignore_index=True)
+		
+
+		def is_int(self, num):
+			flag = True
 			try:
-				split = link.split('/')
-			except:
-				pass
-			if len(split) < 2:
-				pass
-			elif self.is_int(split[1]):
-				urls.append(link)
-		matches = []
-		for link in urls:
-			current_match = self.Match(f'https://www.vlr.gg{link}')
-			matches.append(current_match)
-			file.write(str(current_match))
-		return matches
+				int(num)
+			except ValueError:
+				flag = False
+			if flag:
+				return True
+			else:
+				return False
 
-	def is_int(self, num):
-		flag = True
-		try:
-			int(num)
-		except ValueError:
-			flag = False
-		if flag:
-			return True
-		else:
-			return False
+	def combine_events(self, events):
+		data = []
+		for event in events:
+			data.append(event.data)
+
+		df = pd.concat(data,ignore_index=True)
+		return df 
 
 	#def __init__(self):
 	#	AMER = []
